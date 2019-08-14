@@ -12,8 +12,8 @@ import (
 
 var (
 	port     = flag.String("port", "443", "Listen port")
-	certPath = flag.String("cert", "/etc/pki/tls/certs/hostinger.crt", "Certificate path")
-	keyPath  = flag.String("key", "/etc/pki/tls/private/hostinger.key", "Private key path")
+	certPath = flag.String("cert", "", "Certificate path")
+	keyPath  = flag.String("key", "", "Private key path")
 	dbFile   = flag.String("db", "./IP2PROXY-IP-PROXYTYPE-COUNTRY.BIN", "Path to IP2PROXY db file")
 	header   = flag.String("header", "", "Secret header")
 )
@@ -65,8 +65,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/checkproxy/", handler)
-	if *port == "443" {
-		log.Fatal(http.ListenAndServeTLS(":443", *certPath, *keyPath, nil))
+	if *keyPath != "" {
+		log.Fatal(http.ListenAndServeTLS(":"+*port, *certPath, *keyPath, nil))
 	} else {
 		log.Fatal(http.ListenAndServe(":"+*port, nil))
 	}
