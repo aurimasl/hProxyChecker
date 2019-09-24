@@ -60,6 +60,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	ip := r.URL.Path[len("/checkproxy/"):]
 	result, _ := isProxy(ip)
 	jsonResult, _ := json.Marshal(result)
+	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(jsonResult))
 }
 
